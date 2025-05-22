@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <!-- Import Tailwind CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-blue-800">
+    <div class="min-h-screen flex items-center justify-center ">
+        <div class="max-w-md w-full bg-white p-8 rounded-md shadow-lg">
+            <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-6">Create your account</h2>
+            <form class="space-y-6" method="POST" enctype="multipart/form-data" autocomplete="off">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="rounded-md shadow-sm -space-y-px">
+                    <div class="relative">
+                        <label for="first_name" class="sr-only">First Name</label>
+                        <input id="first_name" name="first_name" type="text" autocomplete="given-name" required class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm mb-4" placeholder="First Name">
+                        {% if form.errors.first_name %}
+                        <p class="text-sm text-red-500">{{ form.errors.first_name }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="relative">
+                        <label for="last_name" class="sr-only">Last Name</label>
+                        <input id="last_name" name="last_name" type="text" autocomplete="family-name" required class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm mb-4" placeholder="Last Name">
+                        {% if form.errors.last_name %}
+                        <p class="text-sm text-red-500">{{ form.errors.last_name }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="relative">
+                        <label for="email" class="sr-only">Email</label>
+                        <input id="email" name="email" type="email" autocomplete="email" required class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm mb-4" placeholder="Email">
+                        {% if form.errors.email %}
+                        <p class="text-sm text-red-500">{{ form.errors.email }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="relative">
+                        <label for="password" class="sr-only">Password</label>
+                        <input id="password" name="password" type="password" autocomplete="new-password" required class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm mb-4" placeholder="Password">
+                        <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                            <svg class="h-5 w-5 text-gray-500" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" stroke="currentColor">
+                                <path id="eye" d="M15 12l-3-3m0 0l-3 3m3-3l3 3m-6 0a4.5 4.5 0 016-6 4.5 4.5 0 01-6 6z" />
+                            </svg>
+                        </button>
+                        {% if form.errors.password %}
+                        <p class="text-sm text-red-500">{{ form.errors.password }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="relative">
+                        <label for="department" class="sr-only">Department</label>
+                        <select id="department" name="department" required class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm mb-4">
+                            <option value="" disabled selected>Select Department</option>
+                            {% for department in departments %}
+                                <option value="{{ department.id }}">{{ department.department }}</option>
+                            {% endfor %}
+                        </select>
+                        {% if form.errors.department %}
+                        <p class="text-sm text-red-500">{{ form.errors.department }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- Submit button -->
+                <div>
+                    <button type="submit" class="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Register</button>
+                </div>
+            </form>
+            <p class="py-2">Already have an account? <a class=" text-blue-600" href="{% url 'login' %}">Login</a>.</p>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        const togglePassword = document.querySelector('#toggle-password');
+        const password = document.querySelector('#password');
+        togglePassword.addEventListener('click', function () {
+            // Toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            // Toggle the eye icon
+            this.querySelector('svg').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

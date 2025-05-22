@@ -1,0 +1,73 @@
+<!-- base/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Import Tailwind CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-blue-800">
+    <section class="h-screen flex items-center justify-center">
+        <div class="max-w-md w-full bg-white p-8 rounded-md shadow-lg">
+            <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-6">Login</h2>
+            <form class="space-y-6" method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <!-- Email input -->
+                <div class="relative">
+                    <label for="email" class="sr-only">Email</label>
+                    <input id="email" name="email" type="email" autocomplete="email" required class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email">
+                    {% if form.errors.email %}
+                    <p class="mt-1 text-sm text-red-500">{{ form.errors.email }}</p>
+                    {% endif %}
+                </div>
+                <!-- Password input -->
+                <div class="relative">
+                    <label for="password" class="sr-only">Password</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Password">
+                    <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                        <svg class="h-5 w-5 text-gray-500" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" stroke="currentColor">
+                            <path id="eye" d="M15 12l-3-3m0 0l-3 3m3-3l3 3m-6 0a4.5 4.5 0 016 6 4.5 4.5 0 01-6 6z" />
+                        </svg>
+                    </button>
+                    {% if form.errors.password %}
+                    <p class="mt-1 text-sm text-red-500">{{ form.errors.password }}</p>
+                    {% endif %}
+                </div>
+                <!-- Error message display area -->
+                <div>
+                    {% if error_message %}
+                    <p id="error-message" class="text-sm text-red-500">{{ error_message }}</p>
+                    {% endif %}
+                </div>
+                <!-- Submit button -->
+                <div>
+                    <button type="submit" class="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-800 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Login</button>
+                </div>
+                <!-- Forgot password link -->
+                <div class="text-sm text-center">
+                    <a href="{% url 'password_reset' %}" class="text-blue-600 hover:underline">Forgot Password?</a>
+                </div>
+            </form>
+            <p class="py-2">Don't have an account? <a class="text-blue-600" href="{% url 'registration'%}">Create New Account</a>.</p>
+        </div>
+    </section>
+
+    <script>
+        // Toggle password visibility
+        const togglePassword = document.querySelector('#toggle-password');
+        const password = document.querySelector('#password');
+        togglePassword.addEventListener('click', function () {
+            // Toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            // Toggle the eye icon
+            this.querySelector('svg').classList.toggle('hidden');
+        });
+    </script>
+</body>
+
+</html>
